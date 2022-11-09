@@ -20,6 +20,7 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
+  background-color: #00ff15;
 }
 
 /* LAYOUT */
@@ -30,7 +31,7 @@ main {
   background-color: rgba(12, 11, 11, 0.35);
   backdrop-filter: blur(200px);
   filter: blur();
-  box-shadow: 0 3rem 5rem rgba(228, 45, 45, 0.25);
+  box-shadow: 0 3rem 5rem rgba(53, 255, 144, 0.962);
   border-radius: 9px;
   overflow: hidden;
   display: flex;
@@ -62,6 +63,8 @@ main {
   color: #000000;
   margin-bottom: auto;
 }
+
+
 
 .player--active {
   background-color: rgba(255, 255, 255, 0.4);
@@ -127,6 +130,10 @@ main {
   font-size: 2.4rem;
   display: inline-block;
   margin-right: 0.7rem;
+}
+
+.btn--check {
+  top: 32rem
 }
 
 .btn--new {
