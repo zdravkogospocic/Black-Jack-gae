@@ -13,6 +13,8 @@ const btnNew = document.querySelector(".btn--new");
 const btnRoll = document.querySelector(".btn--roll");
 const btnHold = document.querySelector(".btn--hold");
 
+const btnCheck = document.querySelector(".btn--check");
+
 let scores, currentScore, activePlayer, playing;
 
 // Starting conditions
@@ -32,6 +34,10 @@ const init = function () {
   player1El.classList.remove("player--winner");
   player0El.classList.add("player--active");
   player1El.classList.remove("player--active");
+  document.querySelector(".player--active").style.backgroundColor =
+    "rgba(255, 255, 255, 0.4)";
+  document.querySelector(".player--1").style.backgroundColor =
+    "rgba(255, 255, 255, 0.4)";
 };
 init();
 
@@ -46,16 +52,15 @@ const switchPlayer = function () {
 // Rolling dice functionality
 btnRoll.addEventListener("click", function () {
   const dice = Math.trunc(Math.random() * 32) + 1;
-  if (scores[activePlayer] < 21 || current0El < 21 || current1El < 21) {
+  if (currentScore < 21 && playing) {
     // 1. Generating a random dice roll
 
     // 2. Display dice
     diceEl.classList.remove("hidden");
+    currentScore = currentScore;
 
-    console.log(`Trenutni je ${current0El}`);
-    diceEl.src = `card-${dice}.png`;
-    console.log(dice);
-    console.log(diceEl);
+    diceEl.src = `cards/card-${dice}.png`;
+
     if (dice >= 1 && dice <= 4) {
       // 3. Check for rolled 1
       // Add dice to current score
@@ -104,40 +109,76 @@ btnRoll.addEventListener("click", function () {
       currentScore += 7;
       document.getElementById(`current--${activePlayer}`).textContent =
         currentScore;
-    } else if (currentScore > 21) {
-      document.getElementById(`current--${activePlayer}`).textContent = 0;
     }
-  } else if (currentScore === 21) {
-    document
-      .querySelector(`.player--${activePlayer}`)
-      .classList.add("player--winner");
-    document;
-    playing = false;
   }
-  // Switch to next player
-  else if (scores[activePlayer] > 21) {
-    init();
-  } else {
-    console.log("Prešao si preko 21 majmune");
+  if (currentScore === 21) {
+    console.log("PObjedio si");
+    document.querySelector(".player--active").style.backgroundColor = "#00ff15";
+  }
+  if (currentScore > 21) {
+    console.log("Prešao si preko 21 ");
     init();
   }
 });
 
 btnHold.addEventListener("click", function () {
-  if (scores[activePlayer] < 21) {
+  if (scores[0] < 21 && scores[1] < 21) {
     // 1. Add current score to active player's score
     scores[activePlayer] += currentScore;
     // scores[1] = scores[1] + currentScore
 
     document.getElementById(`score--${activePlayer}`).textContent =
       scores[activePlayer];
-  } else if (scores[activePlayer] > 21) {
-    console.log("Prešao si preko 21 majmune");
-    init();
+    switchPlayer();
+    // }
+    // else if (scores[0] === 21 && scores[1]==21); {
+    //   console.log("Pobjedio si");
+    //
   }
-  switchPlayer();
+  if (scores[0] === scores[1]) {
+    console.log("IGRAČ 1 i IGRAČ 2 imaju jednako bodova");
+    document.querySelector(".player--1").style.backgroundColor = "#ff0000";
+    document.querySelector(".player--active").style.backgroundColor = "#ff0000";
+  }
+  if (scores[0] > 21) {
+    console.log("Prešao si preko 21 majmune, igrač 2 pobjeđuje");
+    document.querySelector(".player--1").style.backgroundColor =
+      " rgba(21, 249, 0, 0.4)";
+  }
+  if (scores[1] > 21) {
+    console.log("Prešao si preko 21 , igrač 1 pobjeđuje");
+    document.querySelector(".player--active").style.backgroundColor =
+      " rgba(21, 249, 0, 0.4)";
+  }
+  if (scores[0] === 21) {
+    console.log("POBJEDIO je igrač 1 ");
+    document.querySelector(".player--0").style.backgroundColor = "#00ff15";
+  }
+  if (scores[1] === 21) {
+    console.log("POBJEDIO je igrač 2 SI");
+    document.querySelector(".player--1").style.backgroundColor = "#00ff15";
+  }
 });
 
-if (currentScore > 21) console.log("Izgubio si igru");
-
 btnNew.addEventListener("click", init);
+
+btnCheck.addEventListener("click", function () {
+  if (scores[0] > scores[1]) {
+    console.log(` PRVI ${scores[0]}`);
+    console.log(` DRUGI ${scores[1]}`);
+    console.log(`Pobjednik je IGRAC JEDAN`);
+    document.querySelector(".player--active").style.backgroundColor = "#60b347";
+  } else if (scores[0] < scores[1]) {
+    console.log(` PRVI ${scores[0]}`);
+    console.log(` DRUGI ${scores[1]}`);
+    console.log(`Pobjednik je IGRAC DVA`);
+    document.querySelector(".player--1").style.backgroundColor = "#60b347";
+  } else {
+    console.log(` PRVI ${scores[0]}`);
+    console.log(` DRUGI ${scores[1]}`);
+    console.log(`Igraci imaju jednako bodova`);
+    document.querySelector(".player--1").style.backgroundColor = "#ff0000";
+    document.querySelector(".player--active").style.backgroundColor = "#ff0000";
+    alert("Igrači imaju jednako bodova, Izjednačeno je");
+  }
+});
